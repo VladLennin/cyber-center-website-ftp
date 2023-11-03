@@ -1,15 +1,22 @@
 const express = require('express');
+const https = require('https')
 const fs = require('fs');
+const http = require('http')
 const path = require('path');
 const multer = require('multer');
 const cors = require("cors");
 
-//some comment for test git
-//some comment for test git 2
+const absolutePath = path.resolve('')
+
 
 const app = express();
+
+var httpServer = http.createServer(app);
+
+
 app.use(cors())
 const port = 3005;
+
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -37,7 +44,6 @@ app.post('/ftp/upload', upload.single('file'), (req, res) => {
     const file = req.file;
     const fileName = req.body.fileName
     file.filename = fileName
-    console.log(fileName)
     if (!file) {
         return res.status(400).send('No file uploaded');
     }
@@ -45,6 +51,7 @@ app.post('/ftp/upload', upload.single('file'), (req, res) => {
     res.send('File uploaded successfully');
 });
 
-app.listen(port, () => {
+httpServer.listen(port, () => {
     console.log(`FTP server is running on port ${port}`);
 });
+
